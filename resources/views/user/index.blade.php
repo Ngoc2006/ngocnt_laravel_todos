@@ -1,5 +1,5 @@
-@extends('layouts.master') {{-- Mình phải extends là file master để có thể nhét content vào--}}
-@section('content')  {{--khởi tạo section content --}}
+@extends('layouts.master')
+@section('content')
 <div class="container">
     <h3>Danh sách việc cần làm</h3>
     <br>
@@ -11,8 +11,8 @@
             <thead>
                 <tr>
                     <th>#</th>
-                    <th>Todo</th>
-                    <th>Status</th>
+                    <th>Name</th>
+                    <th>Email</th>
                     <th style="text-align:center">Created at</th>
                     <th style="text-align:center">Updated at</th>
                     <th style="text-align:center">Action</th>
@@ -26,7 +26,6 @@
                         <tr>
                             <td>{{$item->id}}</td>
                             <td>{{$item->title}}</td>
-                            <td>{{$item->status}}</td>
                             <td style="text-align:center">{{$item->created_at}}</td>
                             <td style="text-align:center">{{$item->updated_at}}</td>
                             <td style="text-align:center">

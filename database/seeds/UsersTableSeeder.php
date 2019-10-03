@@ -11,11 +11,16 @@ class UsersTableSeeder extends Seeder
      */
     public function run()
     {
-        
-        \DB::table('users')->insert([
-            'name'  => 'admin',
-            'email' => 'admin@gmail.com',
-            'password' => bcrypt('123456') //hàm mã hóa mật khẩu
-        ]);
+        $faker = \Faker\Factory::create();
+        for ($i = 0 ; $i < 10; $i++){
+            \DB::table('users')->insert([
+                'name' => $faker->name,
+	            'email' => $faker->email,
+                'password' => bcrypt('secret'),
+                'status' => 1,
+                'created_at' => \Carbon\Carbon::now()->format('Y-m-d H:i:s'),
+                'updated_at' => \Carbon\Carbon::now()->format('Y-m-d H:i:s')
+            ]);
+        }
     }
 }
