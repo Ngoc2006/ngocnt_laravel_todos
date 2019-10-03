@@ -28,13 +28,13 @@
                             <td style="text-align:center">{{$item->created_at}}</td>
                             <td style="text-align:center">{{$item->updated_at}}</td>
                             <td style="text-align:center">
-                                <a style="display: inline-block; width: 67px;" href="" class="btn btn-sm btn-info">Show</a>
-                                <a style="display: inline-block; width: 67px;" href="" class="btn btn-sm btn-default">Show2</a>
-                                <a style="display: inline-block; width: 67px;" href="" class="btn btn-sm btn-warning">Edit</a>
-                                <form style="display: inline-block;" action="#" method="post" accept-charset="utf-8">
+                            <a style="display: inline-block; width: 67px;" href="{{route('todos.show', $item->id)}}" class="btn btn-sm btn-info">Detail</a>
+                                {{-- <a style="display: inline-block; width: 67px;" href="" class="btn btn-sm btn-default">Show2</a> --}}
+                            <a style="display: inline-block; width: 67px;" href="{{route('todos.edit', $item->id)}}" class="btn btn-sm btn-warning">Edit</a>
+                            <form style="display: inline-block;" action="{{ route('todos.destroy', $item->id) }}" method="post" accept-charset="utf-8">
                                     @csrf
                                     {{method_field('delete')}}
-                                    <button type="submit" class="btn btn-sm btn-danger">Delete</button>
+                                    <button type="submit" class="btn btn-danger">Delete</button>
                                 </form>
                             </td>
                         </tr>

@@ -14,39 +14,13 @@ class TodoController extends Controller
      * @return \Illuminate\Http\Response
      */
 
-    //  var $list = array(
-    //     array(
-    //         "name" => 'hoc lap trinh',
-    //         "info" => 'hoc lap trinh',
-    //         "createdAt" => 123456789,
-    //         "updatedAt" => 123456789
-    //     ),
-    //     array(
-    //         "name" => 'hoc lap trinh',
-    //         "info" => 'hoc lap trinh',
-    //         "createdAt" => 123456789,
-    //         "updatedAt" => 123456789
-    //     ),
-    //     array(
-    //         "name" => 'hoc HTML',
-    //         "info" => 'hoc HTML',
-    //         "createdAt" => 123456789,
-    //         "updatedAt" => 123456789
-    //     ),
-    //     array(
-    //         "name" => 'hoc Code Base',
-    //         "info" => 'hoc Code Base',
-    //         "createdAt" => 123456789,
-    //         "updatedAt" => 123456789
-    //     )
-    // );
-
 
     public function index()
     {
-        // $list = DB::table('todos')->get();
-        $list = Todo::get();
-        //dd($list); //tương đương vs var dump->die của php
+        // $list = DB::table('todos')->get();  //cách 1
+        // dd($list); //tương đương vs var dump->die của php
+        // $list = Todo::get(); //cách 2    
+        $list = Todo::latest()->get();  //cách 3
         return view('todo.index')->with('list', $list);
     }
 
@@ -68,14 +42,26 @@ class TodoController extends Controller
      */
     public function store(Request $request)
     {
-         // $data = request()->all();   // get all du lieu (token, method,..)
-         $data['name'] = request()->input('name');
-         $data['info'] = request()->input('info');
-         $data['createdAt']= time();
-         $data['updatedAt']= time();
-
-         array_push($this->list, $data);
-         return view('todo.index')->with('list', $this->list);
+         // Nhận dữ liệu từ $request
+        $title = $request->get('title');
+        $content = $request->get('content');
+        $status = $request->get('status');
+        $data = $request->all();
+        // dump($title);
+        // dump($content);
+        // dump($status);
+        // dd();
+         
+        // Lưu dữ liệu vào đối tượng $todo
+        $todo = new Todo();
+        $todo->user_id = 1;
+         $todo->title = $title;
+        $todo->content = $content;
+        $todo->status = $status;
+        $todo->save();
+        
+        // Chuyển hướng về trang danh sách
+        return redirect()->route('todos.index');
     }
 
     /**
@@ -86,7 +72,8 @@ class TodoController extends Controller
      */
     public function show($id)
     {
-        return "show: ".$id;
+        $item = Todo::find($id);
+        return view('todo.show')->with('item', $item);
     }
 
     /**
@@ -97,7 +84,11 @@ class TodoController extends Controller
      */
     public function edit($id)
     {
-        return view('todo.edit')->with('id', $id);
+        // Lấy dữ liệu với $id
+        $item = Todo::find($id);
+        // dd($item);
+        // Gọi đến view edit
+        return view('todo.edit')->with('item', $item);
     }
 
     /**
@@ -109,7 +100,30 @@ class TodoController extends Controller
      */
     public function update(Request $request, $id)
     {
-        return "update";
+        //Nhận dữ liệu từ $request
+        $title = $request->get('title');
+        $content = $request->get('content');
+        $status = $request->get('status');
+        // dump($title);
+        // dump($content);
+        // dump($status);
+        // dd();
+
+        //tìm todo tương ứng với id
+        $todo = Todo::find($id);
+        // dd($todo);
+
+
+        //Cập nhật dữ liệu mới
+        $todo->title = $title;
+        $todo->content = $content;
+        $todo->status = $status;
+
+        //Lưu dữ liệu
+        $todo->save();
+
+        //chuyển hướng đến trang danh sách
+        return redirect()->route('todos.index');
     }
 
     /**
@@ -120,6 +134,10 @@ class TodoController extends Controller
      */
     public function destroy($id)
     {
-        return "destroy";
+        // dd($id);
+        // Xoá với id tương ứng 
+        Todo::destroy($id);
+        // Chuyển hướng về trang danh sách
+        return redirect()->route('todos.index');
     }
 }
